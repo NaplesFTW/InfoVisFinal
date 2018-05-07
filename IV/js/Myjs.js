@@ -89,17 +89,17 @@ var rt = cw(function(data,cb){
 });
 
 rt.data(cw.makeUrl("js/trips.json"));
-//*****************************************************************************************************************************************	
+//*****************************************************************************************************************************************
 //*****************************************************************************************************************************************
 // Drawing Shapes (polyline, polygon, circle, rectangle, marker) Event:
 // Select from draw box and start drawing on map.
-//*****************************************************************************************************************************************	
+//*****************************************************************************************************************************************
 
 map.on('draw:created', function (e) {
-	
+
 	var type = e.layerType,
 		layer = e.layer;
-	
+
 	if (type === 'rectangle') {
 		console.log(layer.getLatLngs()); //Rectangle Corners points
 		var bounds=layer.getBounds();
@@ -109,8 +109,8 @@ map.on('draw:created', function (e) {
 		DrawRS(result);
 		});
 	}
-	
-	drawnItems.addLayer(layer);			//Add your Selection to Map  
+
+	drawnItems.addLayer(layer);			//Add your Selection to Map
 });
 //*****************************************************************************************************************************************
 // DrawRS Function:
@@ -120,17 +120,17 @@ map.on('draw:created', function (e) {
 //*****************************************************************************************************************************************
 function DrawRS(trips) {
 	for (var j=0; j<trips.length; j++) {  // Check Number of Segments and go through all segments
-		var TPT = new Array();			  
-		TPT = TArr[trips[j].tripid].split(',');  		 // Find each segment in TArr Dictionary. 
+		var TPT = new Array();
+		TPT = TArr[trips[j].tripid].split(',');  		 // Find each segment in TArr Dictionary.
 		var polyline = new L.Polyline([]).addTo(drawnItems);
         polyline.setStyle({
             color: 'red',                      // polyline color
 			weight: 1,                         // polyline weight
 			opacity: 0.5,                      // polyline opacity
-			smoothFactor: 1.0  
+			smoothFactor: 1.0
         });
 		for(var y = 0; y < TPT.length-1; y=y+2){    // Parse latlng for each segment
 			polyline.addLatLng([parseFloat(TPT[y+1]), parseFloat(TPT[y])]);
 		}
-	}		
+	}
 }
