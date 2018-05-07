@@ -6,10 +6,23 @@ function getStreetNames(callback) {
     $.getJSON("js/trips.json", data => {
         var names = [];
         data.features.forEach(feature => {
-            names = names.concat(feature.properties.streetnames);
+            var streetnames = feature.properties.streetnames;
+            streetnames.forEach(x => names.push(x));
         });
 
         callback(names);
+    });
+}
+
+function getStreetWords(callback) {
+    getStreetNames(names => {
+        var words = [];
+        names.forEach(name => {
+            var splitWords = name.split(" ");
+            splitWords.forEach(x => words.push(x));
+        });
+
+        callback(words);
     });
 }
 
