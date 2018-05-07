@@ -49,45 +49,54 @@
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script type="text/javascript">
     google.charts.load('current', {'packages':['sankey']});
-    google.charts.setOnLoadCallback(drawChart);
-    function setRows(data){
+    google.charts.setOnLoadCallback(() => $.getJSON("js/trips.json", drawChart));
+
+    function setRows(d){
       var i;
-      var formData;
-      for(i = 0; i < data.length; ++i){
-        formData[i] = "[ " + data[i].features.properties.duration + ", " + data[i].features.properties.distance + ", " + Number(data[i].features.properties.avspeed) + " ]"
+      var formData = [];
+      for(i=0; i < 10; ++i){
+        var data = {};
+        data.duration = String(Math.round(Number(d.features[i].properties.duration)));
+        data.distance = String(Math.round(Number(d.features[i].properties.distance)));
+        data.avspeed = Math.round(Number(d.features[i].properties.avspeed));
+        formData.push(data);
       }
       console.log(formData);
-      for(i = 0; i < formData.length; ++i){
-        data.addRows([
-          formData[i],
-        ]);
-      }
-    }
 
-    function drawChart() {
+    return formData;
+  }
+
+    function drawChart(json) {
       var data = new google.visualization.DataTable();
       data.addColumn('string', 'Duration');
       data.addColumn('string', 'Distance');
       data.addColumn('number', 'Average Speed')
 
-      $.getJSON('js/trips.json', function(json) {setRows(json);});
+      var newData = setRows(json);
+      console.log(newData);
 
-      /*var i;
-      for(i = 0; i < myData.length; i++){
-        data.addRows([[ myData[i].maxspeed, myData[i].minspeed, myData[i].maxspeed - myData[i].minspeed]]);
-      }*/
-      /*data.addRows([
-        [ 'A', 'X', 5 ],
+      data.addRows([
+        [ newData[2].duration, newData[0].distance, newData[0].avspeed ],
+        [ newData[2].duration, newData[1].distance, newData[1].avspeed ],
+        [ newData[2].duration, newData[2].distance, newData[2].avspeed ],
+        [ newData[2].duration, newData[3].distance, newData[3].avspeed ],
+        [ newData[2].duration, newData[4].distance, newData[4].avspeed ],
+        [ newData[2].duration, newData[5].distance, newData[5].avspeed ],
+        [ newData[3].duration, newData[6].distance, newData[6].avspeed ],
+        [ newData[3].duration, newData[7].distance, newData[7].avspeed ],
+        [ newData[3].duration, newData[8].distance, newData[8].avspeed ],
+        [ newData[3].duration, newData[9].distance, newData[9].avspeed ]
+        /*[ 'A', 'X', 5 ],
         [ 'A', 'Y', 7 ],
         [ 'A', 'Z', 6 ],
         [ 'B', 'X', 2 ],
         [ 'B', 'Y', 9 ],
-        [ 'B', 'Z', 4 ]
-      ]);*/
+        [ 'B', 'Z', 4 ]*/
+      ]);
 
       // Sets chart options.
       var options = {
-        width: 500,
+        width: 1000,
       };
 
       // Instantiates and draws our chart, passing in some options.
@@ -109,11 +118,12 @@
         </div>
         <!-- /.container -->
     </nav>
-	 <div id="map"></div>
-	 <div id="rightside">
+	 <!--<div id="map"></div>-->
+	 <!--<div id="rightside">
 		<img src="test.jpg" style="margin:auto; width:100%;display:block" />
-    <div id="sankey_basic" style="width: 100%; margin:auto; display:block;"></div>
-	 </div>
+  </div>-->
+  <div id="sankey_basic" style="width: 100%; margin:auto; display:block;"></div>
+
     <!-- jQuery (necessary for Bootstraps JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -121,6 +131,6 @@
 
 	<!-- Your js File -->
     <script src="js/Myjs.js"></script>
-
+    
   </body>
 </html>
