@@ -54,12 +54,12 @@ function drawWordCloud(words){
               word_count[word] = 1;
             }
           }
-        })
+        });
       }
 
     const svg_location = "#word-cloud";
-    var width = $(document).width();
-    var height = $(document).height();
+    var width = $(svg_location).width();
+    var height = $(svg_location).height();
 
     var fill = d3.scale.category20();
 
